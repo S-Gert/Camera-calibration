@@ -14,6 +14,8 @@ class CameraCalibration:
 
         self.cap = cv2.VideoCapture(0)
 
+        self.camera_feed_window_warning = False
+
     def capture_frame(self):
         ret, frame = self.cap.read()
         if not ret:
@@ -36,9 +38,13 @@ class CameraCalibration:
 
         try:
             cv2.imshow('Camera Feed', frame)
+            cv2.waitKey(1)
         except:
-            print("Unable to open camera feed window.")
-        cv2.waitKey(1)
+            if self.camera_feed_window_warning == False:
+                print("Unable to open camera feed window.")
+                self.camera_feed_window_warning = True
+            else:
+                pass
 
         if found:
             self.objpoints.append(self.objp)
