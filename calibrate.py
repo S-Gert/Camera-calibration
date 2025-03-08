@@ -2,6 +2,11 @@ import cv2
 import numpy as np
 import time
 
+'''
+Meant to be used with 5 checkerboard patterns.
+If the checkerboards aren't perfectly flat the calibration will be inaccurate.
+'''
+
 class CameraCalibration:
     def __init__(self, checkerboard_size=(8, 6)):
         self.checkerboard_size = checkerboard_size
@@ -73,7 +78,7 @@ class CameraCalibration:
             if frame is None or gray is None:
                 break
             
-            if new_time > old_time + 0.1:
+            if new_time > old_time + 0.5:
                 self.process_frame(frame, gray)
                 old_time = time.time()
 
