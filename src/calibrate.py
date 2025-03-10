@@ -8,7 +8,10 @@ If the checkerboards aren't perfectly flat the calibration will be inaccurate.
 '''
 
 class CameraCalibration:
-    def __init__(self, checkerboard_size=(8, 6)):
+    def __init__(self, checkerboard_size=(8, 6), open_window = True):
+        self.open_window = open_window
+        self.camera_feed_window_warning = False
+        
         self.checkerboard_size = checkerboard_size
         self.objpoints = []  # 3D real world points
         self.imgpoints = []  # 2D image points
@@ -19,7 +22,6 @@ class CameraCalibration:
 
         self.cap = cv2.VideoCapture(0)
 
-        self.camera_feed_window_warning = False
 
     def capture_frame(self):
         ret, frame = self.cap.read()
@@ -41,15 +43,16 @@ class CameraCalibration:
         if found:
             cv2.drawChessboardCorners(frame, self.checkerboard_size, corners, found)
 
-        try:
-            cv2.imshow('Camera Feed', frame)
-            cv2.waitKey(1)
-        except:
-            if self.camera_feed_window_warning == False:
-                print("Unable to open camera feed window.")
-                self.camera_feed_window_warning = True
-            else:
-                pass
+        if self.open_window:
+            try:
+                cv2.imshow('Camera Feed', frame)
+                cv2.waitKey(1)
+            except:
+                if self.camera_feed_window_warning == False:
+                    print("Unable to open camera feed window.")
+                    self.camera_feed_window_warning = True
+                else:
+                    pass
 
         if found:
             self.objpoints.append(self.objp)
@@ -66,7 +69,7 @@ class CameraCalibration:
             ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(
                 self.objpoints, self.imgpoints, gray_shape[::-1], None, None
             )
-            np.savez('camera_matrix.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs)
+            np.savez('src/camera_matrix.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs)
 
             print(f"Camera matrix:\n{mtx}\nDistortion coefficients:\n{dist}")
 
@@ -78,7 +81,7 @@ class CameraCalibration:
             if frame is None or gray is None:
                 break
             
-            if new_time > old_time + 0.5:
+            if new_time > old_time + 0.1:
                 self.process_frame(frame, gray)
                 old_time = time.time()
 
