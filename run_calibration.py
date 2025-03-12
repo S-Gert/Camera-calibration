@@ -5,7 +5,7 @@ import cv2
 
 def main():
     open_camera_feed()
-    calibrator = CameraCalibration(open_window=False)
+    calibrator = CameraCalibration(open_window=True, checkerboard_count=5)
     calibrator.run()
     # TODO: evaluate calibration accuracy 
     open_calibrated_camera_feed()

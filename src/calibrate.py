@@ -8,9 +8,10 @@ If the checkerboards aren't perfectly flat the calibration will be inaccurate.
 '''
 
 class CameraCalibration:
-    def __init__(self, checkerboard_size=(8, 6), open_window = True):
+    def __init__(self, checkerboard_size=(8, 6), checkerboard_count=5, open_window = True):
         self.open_window = open_window
         self.camera_feed_window_warning = False
+        self.checkerboard_count = checkerboard_count
         
         self.checkerboard_size = checkerboard_size
         self.objpoints = []  # 3D real world points
@@ -57,7 +58,7 @@ class CameraCalibration:
         if found:
             self.objpoints.append(self.objp)
             self.imgpoints.append(corners)
-            print(f"Checkerboard {self.img_captures}/5 captured")
+            print(f"Checkerboard {self.img_captures}/{self.checkerboard_count} captured")
             self.img_captures += 1
 
             # mask for captured checkerboard
@@ -71,7 +72,7 @@ class CameraCalibration:
             )
             np.savez('src/camera_matrix.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs)
 
-            print(f"Camera matrix:\n{mtx}\nDistortion coefficients:\n{dist}")
+            print(f"Camera matrix:\n{mtx}\nDistortion coefficients:\n{dist}\nReprojection error: {ret}")
 
     def run(self):
         old_time = 0
@@ -85,7 +86,7 @@ class CameraCalibration:
                 self.process_frame(frame, gray)
                 old_time = time.time()
 
-            if self.img_captures > 5:
+            if self.img_captures > self.checkerboard_count:
                 break
 
         self.cap.release()
