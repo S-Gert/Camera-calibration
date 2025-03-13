@@ -9,13 +9,12 @@ def open_camera_feed() -> None:
         if ret == True:
             h_center = int(frame.shape[0]/2)
             w_center = int(frame.shape[1]/2)
-            rectangle_size = 10
+            rectangle_size = 25
             
             rectangle_start = (w_center+rectangle_size, h_center-rectangle_size)
             rectangle_stop = (w_center-rectangle_size, h_center+rectangle_size)
 
             cv2.rectangle(frame, rectangle_start, rectangle_stop, (0, 255, 0), 1)
-            
             cv2.imshow('Camera feed', frame)
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 break

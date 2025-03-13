@@ -19,7 +19,7 @@ def open_calibrated_camera_feed():
         h, w = frame.shape[:2]
         
         # (0 = tight crop, 1 = full view with distortion)
-        alpha = 0.6
+        alpha = 1
         newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w, h), alpha, (w, h))
         dst = cv2.undistort(frame, mtx, dist, None, newcameramtx)
         

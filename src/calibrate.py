@@ -3,7 +3,7 @@ import numpy as np
 import time
 
 '''
-Meant to be used with 5 checkerboard patterns.
+Meant to be used with a determined amount checkerboard patterns (could be only 1).
 If the checkerboards aren't perfectly flat the calibration will be inaccurate.
 '''
 
@@ -12,8 +12,8 @@ class CameraCalibration:
         self.open_window = open_window
         self.camera_feed_window_warning = False
         self.checkerboard_count = checkerboard_count
-        
         self.checkerboard_size = checkerboard_size
+        
         self.objpoints = []  # 3D real world points
         self.imgpoints = []  # 2D image points
         self.captured_masks = []  # masks for detected checkerboards
@@ -72,7 +72,7 @@ class CameraCalibration:
             )
             np.savez('src/camera_matrix.npz', mtx=mtx, dist=dist, rvecs=rvecs, tvecs=tvecs)
 
-            print(f"Camera matrix:\n{mtx}\nDistortion coefficients:\n{dist}\nReprojection error: {ret}")
+            print(f"Camera matrix:\n{mtx}\nDistortion coefficients:\n{dist}\n")
 
     def run(self):
         old_time = 0
