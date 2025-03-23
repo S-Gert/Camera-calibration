@@ -7,7 +7,7 @@ def open_calibrated_camera_feed():
         mtx = calib_data['mtx']
         dist = calib_data['dist']
     except:
-        raise "camera_matrix.npz Not found"
+        raise "Camera matrix not found."
 
     cap = cv2.VideoCapture(0)
 

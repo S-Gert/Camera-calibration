@@ -3,12 +3,13 @@ import numpy as np
 import time
 
 '''
-Meant to be used with a determined amount checkerboard patterns (could be only 1).
+Meant to be used with a determined amount of checkerboard patterns (could be only 1).
 If the checkerboards aren't perfectly flat the calibration will be inaccurate.
+Also, Ensure that the checkerboards are very well lit.
 '''
 
 class CameraCalibration:
-    def __init__(self, checkerboard_size=(8, 6), checkerboard_count=5, open_window = True):
+    def __init__(self, checkerboard_size=(8, 16), checkerboard_count=5, open_window = True):
         self.open_window = open_window
         self.camera_feed_window_warning = False
         self.checkerboard_count = checkerboard_count
@@ -40,7 +41,7 @@ class CameraCalibration:
 
     def process_frame(self, frame, gray):
         found, corners = cv2.findChessboardCorners(gray, self.checkerboard_size, None)
-
+    
         if found:
             cv2.drawChessboardCorners(frame, self.checkerboard_size, corners, found)
 

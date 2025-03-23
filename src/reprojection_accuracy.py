@@ -13,10 +13,10 @@ def load_calibration(file_path='src/camera_matrix.npz'):
             dist = data['dist']
             return mtx, dist
     except FileNotFoundError:
-        print("Camera matrix file not found.")
+        print("Camera matrix not found.")
         return None, None
 
-def measure_reprojection_error(checkerboard_size=(8, 6), open_window=True):
+def measure_reprojection_error(checkerboard_size=(8, 16), open_window=True):
     mtx, dist = load_calibration()
     if mtx is None or dist is None:
         return
@@ -52,13 +52,14 @@ def measure_reprojection_error(checkerboard_size=(8, 6), open_window=True):
         
         if open_window:
             cv2.imshow('Reprojection error', frame)
-            print(f"Reprojection error: {error:.4f}")
+            if found:
+                print(f"Reprojection error: {error:.4f}")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         elif len(error_array) >= total_errors_to_average:
             break
     
-    print(f"Average reprojection error: {(sum(error_array)/total_errors_to_average):.4f}")
+    print(f"Average reprojection error: {(sum(error_array[:total_errors_to_average])/total_errors_to_average):.4f}")
     cap.release()
     cv2.destroyAllWindows()
     
