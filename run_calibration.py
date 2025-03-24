@@ -6,10 +6,11 @@ import cv2
 
 def main():
     checkerboard_size = (12, 20) #(height, width)
+    checkerboard_count = 1
 
     print("Align camera to center of checkerboard and press Q to calibrate.")
     open_camera_feed(show_checkerboard=True, checkerboard_size=checkerboard_size)
-    calibrator = CameraCalibration(open_window=False, checkerboard_size=checkerboard_size,checkerboard_count=1)
+    calibrator = CameraCalibration(open_window=False, checkerboard_size=checkerboard_size,checkerboard_count=checkerboard_count)
     # IMPORTANT: Ensure the checkerboards are very well lit, otherwise it will definitely calibrate inaccurately!
     calibrator.run()
     measure_reprojection_error(checkerboard_size=checkerboard_size, open_window=True)
