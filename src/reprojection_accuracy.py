@@ -49,13 +49,17 @@ def measure_reprojection_error(checkerboard_size=(8, 16), open_window=True):
             for corner, proj in zip(corners, projected_points):
                 cv2.circle(frame, tuple(corner.ravel().astype(int)), 5, (0, 255, 0), -1)
                 cv2.circle(frame, tuple(proj.ravel().astype(int)), 5, (0, 0, 255), -1)
-        
+
         if open_window:
-            cv2.imshow('Reprojection error', frame)
-            if found:
-                print(f"Reprojection error: {error:.4f}")
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            try:
+                cv2.imshow('Reprojection error', frame)
+                if found:
+                    print(f"Reprojection error: {error:.4f}")
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+            except:
+                print("Unable to open camera feed window.")
+
         elif len(error_array) >= total_errors_to_average:
             break
     
